@@ -1,6 +1,18 @@
 const express = require("express");
 const contactOperations = require("../../models");
 const createError = require("http-errors");
+const Joi = require("joi");
+
+const schema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net", "ua"] },
+    })
+    .required(),
+  phone: Joi.number(),
+});
 
 const router = express.Router();
 // GET /api/contacts/
@@ -38,7 +50,23 @@ router.get("/:contactId", async (req, res, next) => {
 });
 // Post /api/contacts/
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { error } = schema.validate(req.body);
+    const result = await contactOperations.addContact(req.body);
+    if (error) {
+      throw createError(
+        400,
+        `Name or e-mail entered incorrectly. Please try again`
+      );
+    }
+    res.status(201).json({
+      status: "Success",
+      code: 201,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 // Delete /api/contacts/:contactId
 router.delete("/:contactId", async (req, res, next) => {
