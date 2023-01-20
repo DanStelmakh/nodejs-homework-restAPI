@@ -1,5 +1,5 @@
 const app = require("./app");
 
-app.listen(3001, () => {
-  console.log("Server running. Use our API on port: 3001");
+app.listen(5005, () => {
+  console.log("Server running. Use our API on port: 5005");
 });

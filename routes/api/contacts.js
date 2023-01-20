@@ -11,7 +11,7 @@ const schema = Joi.object({
       tlds: { allow: ["com", "net", "ua"] },
     })
     .required(),
-  phone: Joi.number(),
+  phone: Joi.string().required(),
 });
 
 const router = express.Router();
@@ -37,7 +37,7 @@ router.get("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const contactById = await contactOperations.getContactById(contactId);
     if (!contactById) {
-      throw createError(404, `No contact with id:${contactId}`);
+      throw createError(404, `Not found id:${contactId}`);
     }
     res.json({
       status: "Success",
@@ -52,13 +52,14 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const { error } = schema.validate(req.body);
-    const result = await contactOperations.addContact(req.body);
     if (error) {
-      throw createError(
-        400,
-        `Name or e-mail entered incorrectly. Please try again`
-      );
+      throw createError(400, `Missing required name field`);
     }
+    const result = await contactOperations.addContact(req.body);
+    if (!result) {
+      throw createError(404, `Bad request`);
+    }
+
     res.status(201).json({
       status: "Success",
       code: 201,
@@ -70,11 +71,42 @@ router.post("/", async (req, res, next) => {
 });
 // Delete /api/contacts/:contactId
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { contactId } = req.params;
+    const result = await contactOperations.removeContact(contactId);
+    if (!result) {
+      throw createError(404, `Not found id:${contactId}`);
+    }
+    res.json({
+      status: "Success",
+      code: 200,
+      message: "contact deleted",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      throw createError(400, `Missing  fields`);
+    }
+    const { contactId } = req.params;
+    const result = await contactOperations.updateContact(contactId, req.body);
+    if (!result) {
+      throw createError(404, `Not found `);
+    }
+    res.json({
+      status: "Success",
+      code: 200,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
