@@ -7,7 +7,10 @@ const signUp = async (req, res, next) => {
     const { email, subscription, password } = req.body;
     const user = await User.findOne({ email });
     if (user) {
-      throw createError(409, `User with email:${email} already registered`);
+      throw createError(
+        409,
+        `User with this email:${email} already registered`
+      );
     }
 
     const saltPassword = bcrypt.genSaltSync(10);
