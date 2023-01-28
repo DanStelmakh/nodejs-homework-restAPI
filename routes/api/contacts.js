@@ -1,8 +1,8 @@
 const express = require("express");
+const router = express.Router();
 const { contacts: ctrl } = require("../../controllers");
 const { validation, isValidId } = require("../../midlewares");
 const { schemas } = require("../../models");
-const router = express.Router();
 
 // GET /api/contacts/
 router.get("/", ctrl.getAll);

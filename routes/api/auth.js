@@ -8,4 +8,6 @@ const { auth: ctrl } = require("../../controllers");
 
 router.post("/signup", validation(userSchemas.joiRegisterSchema), ctrl.signUp);
 
+router.post("/login", validation(userSchemas.joiLoginSchema), ctrl.login);
+
 module.exports = router;
