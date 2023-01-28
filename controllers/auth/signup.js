@@ -1,5 +1,6 @@
 const { User } = require("../../models");
 const createError = require("http-errors");
+const bcrypt = require("bcrypt");
 
 const signUp = async (req, res, next) => {
   try {
@@ -8,7 +9,16 @@ const signUp = async (req, res, next) => {
     if (user) {
       throw createError(409, `User with email:${email} already registered`);
     }
-    const result = await User.create({ subscription, email, password });
+
+    const saltPassword = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, saltPassword);
+
+    await User.create({
+      subscription,
+      email,
+      password: hashedPassword,
+    });
+
     res.status(201).json({
       status: "Created",
       code: 201,

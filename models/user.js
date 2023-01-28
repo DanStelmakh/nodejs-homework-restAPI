@@ -5,6 +5,10 @@ const subscriptionList = ["starter", "pro", "business"];
 
 const userSchema = Schema(
   {
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
     password: {
       type: String,
       required: [true, "Password is required"],
