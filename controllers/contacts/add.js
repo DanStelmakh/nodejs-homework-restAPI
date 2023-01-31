@@ -3,7 +3,9 @@ const createError = require("http-errors");
 
 const add = async (req, res, next) => {
   try {
-    const result = await Contact.create(req.body);
+    const { _id } = req.user;
+
+    const result = await Contact.create({ ...req.body, owner: _id });
     if (!result) {
       throw createError(404, `Bad request`);
     }
