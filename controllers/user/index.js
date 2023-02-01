@@ -1,3 +1,4 @@
 const currentUser = require("./currentUser");
+const updateSubscription = require("./updateSubscription");
 
-module.exports = {currentUser};
+module.exports = { currentUser, updateSubscription };
