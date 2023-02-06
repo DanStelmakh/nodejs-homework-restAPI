@@ -18,11 +18,15 @@ const userSchema = Schema(
     subscription: {
       type: String,
       enum: subscriptionList,
-      default: "starter",
+      default: "start",
     },
     token: {
       type: String,
       default: null,
+    },
+    avatarURL: {
+      type: String,
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }
