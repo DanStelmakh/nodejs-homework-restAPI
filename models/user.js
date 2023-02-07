@@ -18,7 +18,7 @@ const userSchema = Schema(
     subscription: {
       type: String,
       enum: subscriptionList,
-      default: "start",
+      default: subscriptionList[0],
     },
     token: {
       type: String,

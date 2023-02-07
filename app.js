@@ -1,12 +1,6 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-// const path = require("path");
-// const fs = require("fs/promises");
-// const { upload } = require("./midlewares");
-
-// const filePath = path.join(__dirname, "public");
-// const fileDir = path.join(__dirname, "public", "avatar");
 
 require("dotenv").config();
 
@@ -26,12 +20,6 @@ app.use(express.static("public"));
 app.use("/api/users", authRouters);
 // Contacts routers
 app.use("/api/contacts", contactsRouter);
-// Upload files routers
-// app.post("/upload", upload.single("avatar"), async (req, res, next) => {
-//   const { path: tempUpload, originalname } = req.file;
-//   const fullFilePath = path.join(fileDir, originalname);
-//   fs.rename(tempUpload, fullFilePath);
-// });
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

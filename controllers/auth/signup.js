@@ -5,7 +5,7 @@ const gravatar = require("gravatar");
 
 const signUp = async (req, res, next) => {
   try {
-    const { email, subscription, password } = req.body;
+    const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (user) {
       throw createError(
@@ -18,12 +18,12 @@ const signUp = async (req, res, next) => {
     const saltPassword = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, saltPassword);
 
-    await User.create({
-      email,
+    const newUser = await User.create({
+      ...req.body,
       password: hashedPassword,
-      subscription,
       avatarURL,
     });
+    const { subscription } = newUser;
 
     res.status(201).json({
       status: "Created",
