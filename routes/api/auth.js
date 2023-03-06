@@ -16,6 +16,8 @@ router.get("/logout", authorization, ctrl.logout);
 
 router.patch("/subscriprtion", authorization, user.updateSubscription);
 
+router.get("/verify/:verificationToken", user.verifyEmail);
+
 router.patch(
   "/avatars",
   authorization,
