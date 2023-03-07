@@ -16,10 +16,3 @@ const sendMail = async (data) => {
 };
 
 module.exports = { sendMail };
-
-// const mail = {
-//   to: "danila@gmail.com",
-//   from: "danila19.08.92@gmail.com",
-//   subject: "New user",
-//   html: "<p>New user has signed up</p>",
-// };

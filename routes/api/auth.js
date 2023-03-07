@@ -1,7 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const { validation, authorization, upload } = require("../../midlewares");
+const {
+  validation,
+  authorization,
+  upload,
+  emailValidation,
+} = require("../../midlewares");
 const { userSchemas } = require("../../models");
 
 const { auth: ctrl, user } = require("../../controllers");
@@ -17,6 +22,8 @@ router.get("/logout", authorization, ctrl.logout);
 router.patch("/subscriprtion", authorization, user.updateSubscription);
 
 router.get("/verify/:verificationToken", user.verifyEmail);
+
+router.post("/verify", emailValidation, user.repeatVerifyEmail);
 
 router.patch(
   "/avatars",
